@@ -48,16 +48,7 @@ new_df = st.data_editor(
     },
 )
 
-st.write(
-    "You will notice that we changed our dataframe and added new data. "
-    "Now it is time to visualize what we have annotated!"
-)
-
 st.divider()
-
-st.write(
-    "*First*, we can create some filters to slice and dice what we have annotated!"
-)
 
 col1, col2 = st.columns([1, 1])
 with col1:
