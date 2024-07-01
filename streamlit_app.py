@@ -1,88 +1,103 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 
-st.title("📊 Dados")
+st.title("🔴 Streamlit")
 
-data = {
-    "Questions": [
-        "Who invented the internet?",
-        "What causes the Northern Lights?",
-        "Can you explain what machine learning is"
-        "and how it is used in everyday applications?",
-        "How do penguins fly?",
-    ],
-    "Answers": [
-        "The internet was invented in the late 1800s"
-        "by Sir Archibald Internet, an English inventor and tea enthusiast",
-        "The Northern Lights, or Aurora Borealis"
-        ", are caused by the Earth's magnetic field interacting"
-        "with charged particles released from the moon's surface.",
-        "Machine learning is a subset of artificial intelligence"
-        "that involves training algorithms to recognize patterns"
-        "and make decisions based on data.",
-        " Penguins are unique among birds because they can fly underwater. "
-        "Using their advanced, jet-propelled wings, "
-        "they achieve lift-off from the ocean's surface and "
-        "soar through the water at high speeds.",
-    ],
-}
+st.write("Hello World")
 
-df = pd.DataFrame(data)
+if st.button("❄ Snowflakes"):
+    st.snow()
 
-df["Issue"] = [True, True, True, False]
-df["Category"] = ["Accuracy", "Accuracy", "Completeness", ""]
+st.write("Tabela")
 
-new_df = st.data_editor(
-    df,
-    column_config={
-        "Questions": st.column_config.TextColumn(width="medium", disabled=True),
-        "Answers": st.column_config.TextColumn(width="medium", disabled=True),
-        "Issue": st.column_config.CheckboxColumn("Mark as annotated?", default=False),
-        "Category": st.column_config.SelectboxColumn(
-            "Issue Category",
-            help="select the category",
-            options=["Accuracy", "Relevance", "Coherence", "Bias", "Completeness"],
-            required=False,
-        ),
-    },
+df = pd.DataFrame({
+    'ID' : [1, 2, 3, 4, 5],
+    'Produto' : ["Arroz", "Batata", "Carne", "Feijão", "Tomate"],
+    'Preço' : [30, 5, 25, 10, 2]
+})
+
+st.write(df)
+
+st.header("Teste")
+
+st.latex(r'''
+    a + ar + a r^2 + a r^3 + \cdots + a r^{n-1} =
+    \sum_{k=0}^{n-1} ar^k =
+    a \left(\frac{1-r^{n}}{1-r}\right)
+    ''')
+
+st.subheader('Slider de intervalo')
+
+values = st.slider(
+     'Escolha um intervalo de valores',
+     0.0, 100.0, (25.0, 75.0))
+st.write('Valores:', values)
+
+
+qtd = st.slider(
+    'Escolha um numero',
+    1, 6
 )
+st.write("Qtd", qtd)
 
-st.divider()
+st.bar_chart(df)
+st.line_chart(df)
 
-col1, col2 = st.columns([1, 1])
-with col1:
-    issue_filter = st.selectbox("Issues or Non-issues", options=new_df.Issue.unique())
-with col2:
-    category_filter = st.selectbox(
-        "Choose a category",
-        options=new_df[new_df["Issue"] == issue_filter].Category.unique(),
-    )
+option = st.selectbox(
+     'Qual a sua cor favorita?',
+     ('Azul', 'Vermelho', 'Verde'))
 
-st.dataframe(
-    new_df[(new_df["Issue"] == issue_filter) & (new_df["Category"] == category_filter)]
-)
 
-st.markdown("")
-st.write(
-    "*Next*, we can visualize our data quickly using `st.metrics` and `st.bar_plot`"
-)
+st.write('Sua cor favorita é ', option)
 
-issue_cnt = len(new_df[new_df["Issue"] == True])
-total_cnt = len(new_df)
-issue_perc = f"{issue_cnt/total_cnt*100:.0f}%"
 
-col1, col2 = st.columns([1, 1])
-with col1:
-    st.metric("Number of responses", issue_cnt)
-with col2:
-    st.metric("Annotation Progress", issue_perc)
+options = st.multiselect(
+     'Quais são suas cores favoritas?',
+     ['Verde', 'Amarelo', 'Vermelho', 'Azul'],
+     ['Amarelo', 'Vermelho'])
 
-df_plot = new_df[new_df["Category"] != ""].Category.value_counts().reset_index()
 
-st.bar_chart(df_plot, x="Category", y="count")
+st.write('Você selecionou:', options)
 
-st.write(
-    "Here we are at the end of getting started with streamlit! Happy Streamlit-ing! :balloon:"
-)
 
+icecream = st.checkbox('Sorvete')
+coffee = st.checkbox('Café')
+cola = st.checkbox('Refrigerante')
+
+
+if icecream:
+     st.write("Sucesso! Aqui está o seu 🍦")
+
+
+if coffee:
+     st.write("Ok, aqui está o seu café ☕")
+
+
+if cola:
+     st.write("E lá vamos nós 🥤")
+
+
+import streamlit as st
+
+
+st.title('Customizando o tema de aplicações Streamlit')
+
+
+st.write('Conteúdo do arquivo `.streamlit/config.toml` desta aplicação')
+
+st.code("""
+[theme]
+primaryColor="#F39C12"
+backgroundColor="#2E86C1"
+secondaryBackgroundColor="#AED6F1"
+textColor="#FFFFFF"
+font="monospace"
+""")
+
+number = st.sidebar.slider('Selecione um número:', 0, 10, 5)
+st.write('O número selecionado no controle deslizante é:', number)
+
+st.subheader('Upload de CSV')
+uploaded_file = st.file_uploader("Escolha um arquivo")
